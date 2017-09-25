@@ -1,5 +1,26 @@
-import React from 'react';
+import React, {Component} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
+
+
+class SignInWindow extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {showSignInText: false};
+  }
+
+  render() {
+    let display;
+    if(this.state.showSignInText){
+      diplay = this.props.text;
+    }else{
+      display = ' ';
+    }
+    return (
+      <Text>{display}</Text>
+    );
+  }
+}
+
 
 export default class App extends React.Component {
   render() {
@@ -7,7 +28,7 @@ export default class App extends React.Component {
       <View style={styles.container}>
         <Text>Open up App.js to start working on your app!</Text>
         <Text>Changes you make will automatically reload.</Text>
-        <Text>Shake your phone to open the developer menu.</Text>
+        <SignInWindow text="asd"/>
       </View>
     );
   }
