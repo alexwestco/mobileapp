@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { StyleSheet, Text, View } from 'react-native';
 
 
-class SignInWindow extends Component {
+class SignInWindow extends React.Component {
   constructor(props) {
     super(props);
     this.state = {showSignInText: false};
