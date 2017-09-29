@@ -2,7 +2,11 @@ import React, {Component} from 'react';
 import { View, Image, Text, StyleSheet, } from 'react-native';
 import HeaderImageScrollView, { TriggeringView } from 'react-native-image-header-scroll-view';
 
-export default class DropDownAndroid extends React.Component {
+export class DropDownAndroid extends React.Component {
+
+  constructor(props){
+    super(props);
+  }
 
   render(){
     return(

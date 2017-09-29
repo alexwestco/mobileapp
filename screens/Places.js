@@ -9,13 +9,11 @@ export default class Places extends Component {
         super(props);
 
     }
-    
 
     render() {
-
         return (
           <View style={styles.fill}>
-            <Component />;
+            <DropDownComponent />
           </View>
         );
     }
@@ -29,3 +27,8 @@ const styles = StyleSheet.create({
 
     },
 });
+
+const DropDownComponent = Platform.select({
+  ios: () => DropDownIOS,
+  android: () => DropDownAndroid,
+})();

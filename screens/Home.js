@@ -1,14 +1,14 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, Alert, Image, TextInput, Button, Keyboard, AsyncStorage } from 'react-native';
+import { StyleSheet, Platform, Text, View, TouchableHighlight, Alert, Image, TextInput, Button, Keyboard, AsyncStorage } from 'react-native';
 import { Video } from "expo";
 import Spinner from 'react-native-loading-spinner-overlay';
 
 class ErrorText extends React.Component {
   render(){
     if(this.props.shouldShow){
-      return <Text style={{color:'red'}}>Wrong credentials, please try again</Text>
+      return <Text style={{color:'red', backgroundColor: 'transparent',}}>Wrong credentials, please try again</Text>
     }else{
-      return <Text></Text>
+      return <Text style={{backgroundColor: 'transparent',}}></Text>
     }
   }
 }
@@ -66,7 +66,7 @@ export default class Home extends React.Component {
 
   async getItem() {
   try {
-    const value = await AsyncStorage.getItem("DJANGO_AUTHENTICATIgON_TOKEN");
+    const value = await AsyncStorage.getItem("DJANGO_AUTHENTICATION_TOKEN");
     console.log('hey: '+value);
     return value;
   } catch (error) {
@@ -131,7 +131,7 @@ export default class Home extends React.Component {
 
             {/*  The text */}
             <Text
-              style={{color: 'white', paddingTop: 10, paddingLeft: 10, paddingRight: 10, fontSize: 14, textAlign: 'center'}}>
+              style={{color: 'white', paddingTop: 10, paddingLeft: 10, paddingRight: 10, fontSize: 14, textAlign: 'center', backgroundColor: 'transparent',}}>
               Feel the vibes of your city! Photo uploads all day long! For more details visit www.cityvibes.gr
             </Text>
 
@@ -175,26 +175,29 @@ export default class Home extends React.Component {
 
             {/* The username input space */}
             <TextInput
+              autoCorrect={false}
               placeholder="Username"
+              placeholderTextColor="white"
               underlineColorAndroid= 'white'
               onChangeText={(text) => this.setState({username: text})}
-              style={{fontSize: 19,  color: 'white', width: 200, height: 50, alignSelf: 'center', justifyContent: 'center', paddingBottom: 10}}
+              style={styles.inputTextStyle}
             />
 
             {/* The password input space */}
             <TextInput
+              autoCorrect={false}
               placeholder="Password"
+              placeholderTextColor="white"
               underlineColorAndroid= 'white'
               secureTextEntry
               onChangeText={(text) => this.setState({password: text})}
-              style={{fontSize: 19, color: 'white', width: 200, height: 50, alignSelf: 'center', justifyContent: 'center'}}
-            />
+              style={styles.inputTextStyle}            />
 
             {/* The Sign In text */}
-            <Text style={{color: 'white', fontSize:20, padding:17, alignSelf: 'center', justifyContent: 'center'}} onPress={this.onLoginPressed.bind(this)}>Sign In</Text>
+            <Text style={{color: 'white', fontSize:20, padding:17, alignSelf: 'center', justifyContent: 'center', backgroundColor: 'transparent',}} onPress={this.onLoginPressed.bind(this)}>Sign In</Text>
 
             {/* The Cancel text */}
-            <Text style={{color: 'gray', padding:10, alignSelf: 'center', justifyContent: 'center'}} onPress={this.onChange.bind(this)}>Cancel</Text>
+            <Text style={{color: 'gray', padding:10, alignSelf: 'center', justifyContent: 'center', backgroundColor: 'transparent',}} onPress={this.onChange.bind(this)}>Cancel</Text>
 
             {/* <Spinner visible={this.state.shouldShow} textStyle={{color: '#FFF'}}/> */}
 
@@ -213,8 +216,9 @@ const styles = StyleSheet.create({
     flex: 1,
     backgroundColor: 'black',
   },
+
   paddingStyle: {
-    marginTop: 24,
+    marginTop: (Platform.OS === 'ios') ? 0 : 24,
   },
   myStyle: {
     justifyContent: 'center',
@@ -230,16 +234,17 @@ const styles = StyleSheet.create({
     alignSelf: 'flex-end',
     paddingTop: 33,
     paddingRight: 18,
+    backgroundColor: 'transparent',
   },
   username: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 17,
     alignSelf: 'flex-end',
     padding: 12,
   },
   password: {
     color: 'white',
-    fontSize: 18,
+    fontSize: 17,
     alignSelf: 'flex-end',
     padding: 12,
   },
@@ -261,4 +266,13 @@ const styles = StyleSheet.create({
     bottom: 0,
     right: 0,
   },
+  inputTextStyle: {
+    fontSize: 19,
+    color: 'white',
+    width: 200,
+    height: 50,
+    alignSelf: 'center',
+    justifyContent: 'center',
+    paddingBottom: 10,
+  }
 });

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { View, Image, Text, StyleSheet,  } from 'react-native';
 import HeaderImageScrollView, { TriggeringView } from 'react-native-image-header-scroll-view';
 
-export default class DropDownAndroid extends React.Component {
+export class DropDownIOS extends React.Component {
 
   render(){
     return(
@@ -16,7 +16,7 @@ export default class DropDownAndroid extends React.Component {
             <Image source={require('../../images/toolbar.jpg')} style={styles.image}>
 
               <Image source={{uri: 'http://www.cityvibes.gr/static/main_app/images/logo.png'}} style={{height: 60, width:280, marginTop: 40, marginBottom:20, paddingLeft:30,}} />
-              <Text style={{color:'white', fontSize:18}}> Places near you </Text>
+              <Text style={{color:'white', fontSize:18, backgroundColor:'transparent', }}> Places near you </Text>
 
             </Image>
           </View>
