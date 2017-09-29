@@ -1,23 +1,31 @@
-import React, {Component} from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, Alert, Image, TextInput, Button } from 'react-native';
+import Expo from 'expo';
+import React, { Component } from 'react';
+import { Animated, Platform, StatusBar, StyleSheet, Text, View, Image, } from 'react-native';
+import { DropDownAndroid } from '../android/components/DropDownAndroid';
+import { DropDownIOS } from '../ios/components/DropDownIOS';
 
-export default class Places extends React.Component {
+export default class Places extends Component {
+    constructor(props) {
+        super(props);
 
-  constructor(props) {
-    super(props);
-  }
+    }
+    
 
-  render() {
-    return (
-      <Text>Made it bro</Text>
-    );
-  }
+    render() {
+
+        return (
+          <View style={styles.fill}>
+            <Component />;
+          </View>
+        );
+    }
 }
 
 const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    marginTop: 20,
-    backgroundColor: 'black',
-  },
+    fill: {
+      flex: 1,
+      alignItems: "stretch",
+      backgroundColor: 'black',
+
+    },
 });

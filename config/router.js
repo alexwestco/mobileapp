@@ -3,6 +3,7 @@ import { StackNavigator, } from 'react-navigation';
 
 import Home from '../screens/Home';
 import Places from '../screens/Places';
+import Profile from '../screens/Profile';
 
 export const Screens = StackNavigator({
   Home: {
@@ -15,6 +16,12 @@ export const Screens = StackNavigator({
     screen: Places,
     navigationOptions:{
       title: 'Places',
+    }
+  },
+  Profile: {
+    screen: Profile,
+    navigationOptions:{
+      title: 'Profile',
     }
   },
 }, {

@@ -1,45 +1,125 @@
 import React, {Component} from 'react';
-import { StyleSheet, Text, View, TouchableHighlight, Alert, Image, TextInput, Button } from 'react-native';
+import { StyleSheet, Text, View, TouchableHighlight, Alert, Image, TextInput, Button, Keyboard, AsyncStorage } from 'react-native';
+import { Video } from "expo";
+import Spinner from 'react-native-loading-spinner-overlay';
+
+class ErrorText extends React.Component {
+  render(){
+    if(this.props.shouldShow){
+      return <Text style={{color:'red'}}>Wrong credentials, please try again</Text>
+    }else{
+      return <Text></Text>
+    }
+  }
+}
 
 export default class Home extends React.Component {
 
   constructor(props) {
     super(props);
-    this.state = {basicState: true};
-    this.onChange = this.onChange.bind(this);
+    this.state = {basicState: true, username: ' ', password: ' ', shouldShow: false};
+  }
+
+  storeToken(token){
+    AsyncStorage.setItem("DJANGO_AUTHENTICATION_TOKEN", token, (err)=> {
+      if(err){
+        console.log("an error");
+        throw err;
+      }
+      console.log("success");
+    }).catch((err)=> {
+        console.log("error is: " + err);
+    });
+  }
+
+
+  async onLoginPressed() {
+    try {
+      let response = await fetch('http://www.cityvibes.gr/android/token', {
+                              method: 'POST',
+                              headers: {
+                                'Accept': 'application/json',
+                                'Content-Type': 'application/json',
+                              },
+                              body: JSON.stringify({
+                                username: this.state.username,
+                                password: this.state.password,
+                              })
+                            });
+      let res = await response.json();
+      if (response.status == 200) {
+          let accessToken = res.token;
+          Keyboard.dismiss();
+          this.setState({shouldShow: false, basicState: true});
+          this.storeToken(accessToken);
+          this.props.navigation.navigate('Profile');
+
+      } else {
+          this.setState({shouldShow: true});
+          let error = res;
+          throw error;
+      }
+    } catch(error) {
+        console.log("error " + error);
+    }
+  }
+
+  async getItem() {
+  try {
+    const value = await AsyncStorage.getItem("DJANGO_AUTHENTICATIgON_TOKEN");
+    console.log('hey: '+value);
+    return value;
+  } catch (error) {
+    // Handle errors here
+  }
+}
+
+  _handleVideoRef = component => {
+    const playbackObject = component;
   }
 
   onChange(){
+    //this.playbackObject.setRateAsync(0, true);
     this.setState({basicState: !this.state.basicState});
-  }
-
-  signIn(){
-    return fetch('http://www.cityvibes.gr/android/places/')
-      .then((response) => response.json())
-      .then((responseJson) => {
-        console.log("Hey bro "+responseJson)
-        return responseJson;
-      })
-      .catch((error) => {
-        console.error(error);
-      });
+    this.setState({shouldShow: false});
+    this.state.username=' ';
+    this.state.password=' ';
   }
 
   onLearnMore(){
-    this.props.navigation.navigate('Places',{});
+    this.props.navigation.navigate('Places');
   }
+
 
   render() {
     if(this.state.basicState){
+      //if(this.getItem() is null then, else.....
+
       return (
         <View style={styles.container}>
 
+
+          {/* The background Video */}
+          <Video
+           ref={this._handleVideoRef}
+           source={require('../images/cityvibes.mp4')}
+           rate={1.0}
+           volume={1.0}
+           muted={false}
+           resizeMode="stretch"
+           shouldPlay
+           isLooping
+           style={[StyleSheet.absoluteFill, styles.paddingStyle]}/>
+
+
+          {/* The Sign In text */}
           <View style={[styles.boxContainer, styles.signInContainer]}>
 
-            {/* The Sign In text */}
-            <Text style={styles.signInText} onPress={this.onChange}>Sign In</Text>
+            <Text style={styles.signInText} onPress={this.onChange.bind(this)}>Sign In</Text>
 
           </View>
+
+
 
           <View style={[styles.boxContainer, styles.centerWindowContainer]}>
 
@@ -58,7 +138,7 @@ export default class Home extends React.Component {
             {/* The Feel the Vibes button */}
             <View>
               <TouchableHighlight
-                onPress={this.onLearnMore}>
+                onPress={this.onLearnMore.bind(this)}>
                 <View>
                   <Text style={{borderWidth: 2, borderColor: 'white',backgroundColor: 'transparent', padding:22, marginTop: 80, overflow:'hidden', fontSize: 32, color: 'white'}}>
                     Feel the vibes
@@ -74,27 +154,50 @@ export default class Home extends React.Component {
     }else{
       return (
         <View style={styles.container}>
-          <View style={{alignItems: 'center', justifyContent: 'center'}}>
+
+
+          {/* The background Video */}
+          <Video
+           ref={this._handleVideoRef}
+           source={require('../images/cityvibes.mp4')}
+           rate={1.0}
+           volume={1.0}
+           muted={false}
+           resizeMode="stretch"
+           shouldPlay
+           isLooping
+           style={[StyleSheet.absoluteFill, styles.paddingStyle]}/>
+
+
+          <View style={[styles.boxContainer, styles.myStyle]}>
+
+            <ErrorText shouldShow={this.state.shouldShow} />
 
             {/* The username input space */}
             <TextInput
-              placeholder="username"
-              onChangeText={(text) => this.setState({text})}
-              style={{borderColor: 'gray', color: 'white'}}
+              placeholder="Username"
+              underlineColorAndroid= 'white'
+              onChangeText={(text) => this.setState({username: text})}
+              style={{fontSize: 19,  color: 'white', width: 200, height: 50, alignSelf: 'center', justifyContent: 'center', paddingBottom: 10}}
             />
 
             {/* The password input space */}
             <TextInput
-              placeholder="password"
-              onChangeText={(text) => this.setState({text})}
-              style={{borderColor: 'gray', color: 'white'}}
+              placeholder="Password"
+              underlineColorAndroid= 'white'
+              secureTextEntry
+              onChangeText={(text) => this.setState({password: text})}
+              style={{fontSize: 19, color: 'white', width: 200, height: 50, alignSelf: 'center', justifyContent: 'center'}}
             />
 
             {/* The Sign In text */}
-            <Text style={{color: 'white', fontSize:20, padding:15}} onPress={this.signIn}>Sign In</Text>
+            <Text style={{color: 'white', fontSize:20, padding:17, alignSelf: 'center', justifyContent: 'center'}} onPress={this.onLoginPressed.bind(this)}>Sign In</Text>
 
             {/* The Cancel text */}
-            <Text style={{color: 'white', padding:15}} onPress={this.onChange}>Cancel</Text>
+            <Text style={{color: 'gray', padding:10, alignSelf: 'center', justifyContent: 'center'}} onPress={this.onChange.bind(this)}>Cancel</Text>
+
+            {/* <Spinner visible={this.state.shouldShow} textStyle={{color: '#FFF'}}/> */}
+
           </View>
         </View>
 
@@ -108,13 +211,33 @@ export default class Home extends React.Component {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    marginTop: 20,
     backgroundColor: 'black',
+  },
+  paddingStyle: {
+    marginTop: 24,
+  },
+  myStyle: {
+    justifyContent: 'center',
+    alignSelf: 'center',
+    marginBottom: 100,
   },
   boxContainer: {
     flex: 1,
   },
   signInText: {
+    color: 'white',
+    fontSize: 18 ,
+    alignSelf: 'flex-end',
+    paddingTop: 33,
+    paddingRight: 18,
+  },
+  username: {
+    color: 'white',
+    fontSize: 18,
+    alignSelf: 'flex-end',
+    padding: 12,
+  },
+  password: {
     color: 'white',
     fontSize: 18,
     alignSelf: 'flex-end',
