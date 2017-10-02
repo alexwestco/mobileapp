@@ -2,16 +2,12 @@ import React, { Component } from 'react';
 import {
     AppRegistry,
     StyleSheet,
-    Text,
     View,
     Image,
     FlatList,
     Dimensions,
 } from 'react-native';
-
-
-// sample api http://droidtute.com/reactexample/sample_api/getMovieList.php
-
+import { Container, Header, Content, Card, CardItem, Thumbnail, Text, Button, Icon, Left, Body, Right } from 'native-base';
 const { width, height } = Dimensions.get('window');
 
 const equalWidth = (width / 2)
@@ -30,9 +26,25 @@ export default class App extends Component {
 
     renderRowItem = (itemData) => {
         return (
-            <View>
-                <Image style={{ height: 150, width: equalWidth }} source={{ uri: itemData.item.profile_picture_link }} resizeMode='cover' />
-            </View>
+            <Container style={{
+                borderRadius: 4,
+                borderWidth: 0.5,
+                borderColor: 'red',
+                height: 250,
+                margin: 10
+            }}>
+                <Content>
+                    <Card>
+                        <CardItem cardBody>
+                            <Image style={{height: 150, width: equalWidth}} source={{ uri: itemData.item.profile_picture_link }} resizeMode='cover' />
+                        </CardItem>
+                        <CardItem style={{ flex: 1, flexDirection: 'column', justifyContent: 'flex-start', alignItems: 'flex-start'}}>
+                            <Text>{itemData.item.name}</Text>
+                            <Text style={{fontSize: 10}}>{itemData.item.string_last_update}</Text>
+                        </CardItem>
+                    </Card>
+                </Content>
+            </Container>
         )
     }
 
@@ -74,6 +86,7 @@ const styles = StyleSheet.create({
     container: {
         flex: 1,
         backgroundColor: '#F5FCFF',
-        flexDirection: 'column'
+        flexDirection: 'column',
+        marginTop: 20
     }
 });
