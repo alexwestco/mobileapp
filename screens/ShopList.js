@@ -9,6 +9,7 @@ import {
     Alert
 } from 'react-native';
 import {Container, Content, Card, CardItem, Text} from 'native-base';
+import Spinner from 'react-native-loading-spinner-overlay';
 
 const {width, height} = Dimensions.get('window');
 const equalWidth = (width / 2)
@@ -17,7 +18,8 @@ export default class ShopsList extends Component {
     constructor(props) {
         super(props);
         this.state = {
-            shopsList: []
+            shopsList: [],
+            showSpinner: true
         }
     }
 
@@ -32,7 +34,13 @@ export default class ShopsList extends Component {
                 marginVertical: 8
             }}>
                 <Content showsVerticalScrollIndicator={false}>
-                    <TouchableOpacity onPress={() => {this.props.kappa.navigate('DetailView')}}>
+                    <TouchableOpacity
+                        onPress={() => {
+                        this
+                            .props
+                            .kappa
+                            .navigate('DetailView', {id: itemData.item.id})
+                    }}>
                         <Card>
                             <CardItem cardBody>
                                 <Image
@@ -73,22 +81,25 @@ export default class ShopsList extends Component {
     }
 
     render() {
- 
         return (
-                <View style={styles.container}>
-                    <FlatList
-                        data={this.state.shopsList}
-                        numColumns={2}
-                        keyExtractor={this._keyExtractor}
-                        renderItem={this.renderRowItem}/>
-                </View>
+            <View style={styles.container}>
+                <Spinner visible={this.state.showSpinner} animation='fade'/>
+                <FlatList
+                    data={this.state.shopsList}
+                    numColumns={2}
+                    keyExtractor={this._keyExtractor}
+                    renderItem={this.renderRowItem}/>
+            </View>
         );
     }
 
     getShopsFromApiAsync = () => {
         return fetch('http://www.cityvibes.gr/android/places/').then((response) => response.json()).then((responseJson) => {
             // alert(JSON.stringify(responseJson)) // fetch data complete!
-            this.setState({shopsList: responseJson}) // this will update state to re-render ui
+            this.setState({
+                shopsList: responseJson,
+                showSpinner: !this.state.showSpinner
+            }) // this will update state to re-render ui
             return responseJson;
         }).catch((error) => {
             console.error(error);
@@ -103,4 +114,3 @@ const styles = StyleSheet.create({
         flexDirection: 'column'
     }
 });
-

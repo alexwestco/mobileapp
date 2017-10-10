@@ -74,7 +74,7 @@ export default class DetailView extends React.Component {
 
     componentWillMount() {
         DetailApi
-            .getData()
+            .getData(this.props.navigation.state.params.id)
             .then((res) => {
                 this.setState({fotoData: res})
             }, (reason) => console.log("KAPPA REALITY " + reason))
