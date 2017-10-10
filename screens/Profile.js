@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { StyleSheet, Text, View, TouchableHighlight, Alert, Image, TextInput, Button } from 'react-native';
 import { Video } from "expo";
 
-export default class Places extends React.Component {
+export default class Profile extends React.Component {
 
   constructor(props) {
     super(props);
