@@ -1,12 +1,19 @@
 import React, {Component} from 'react';
-import {View, Image, Text, StyleSheet} from 'react-native';
+import {View, Image, Text, StyleSheet, Picker} from 'react-native';
 import HeaderImageScrollView, {TriggeringView} from 'react-native-image-header-scroll-view';
 import ShopList from '../../screens/ShopList'
 
 export class DropDownAndroid extends React.Component {
   constructor(props) {
     super(props);
+    this.state = {
+      category: 'All'
+    }
+  }
 
+  onValueChange(key, value) {
+    console.log(key + ':' + value)
+    this.setState({category: value})
   }
 
   render() {
@@ -40,15 +47,22 @@ export class DropDownAndroid extends React.Component {
           </Image>
         </View>
       )}>
-        <Text
+        <Picker
           style={{
-          height: 30,
+          height: 40,
           backgroundColor: 'black',
-          color: 'white',
-          fontSize: 18
-        }}>
-          All
-        </Text>
+          color: 'white'
+        }}
+          selectedValue={this.state.category}
+          onValueChange={this
+            .onValueChange
+            .bind(this, 'category')}
+          mode='dropdown'>
+          <item label="All" value="All"></item>
+          <item label="Clubs/Bars" value="Clubs/Bars"></item>
+          <item label="CafeBars" value="CafeBars"></item>
+          <item label="Tsipouradika" value="Tsipouradika"></item>
+        </Picker>
         <View>
           <ShopList kappa={this.props.reality}/>
         </View>
