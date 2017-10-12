@@ -13,7 +13,7 @@ export default class Places extends Component {
     render() {
         return (
           <View style={styles.fill}>
-            <DropDownComponent />
+            <DropDownComponent reality={this.props.navigation}/>
           </View>
         );
     }
